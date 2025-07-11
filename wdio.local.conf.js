@@ -3,9 +3,11 @@ import { generateAccessibilityReportIndex } from './test/utils/accessibility-che
 export const config = {
   baseUrl: `https://grants-ui.dev.cdp-int.defra.cloud`,
   maxInstances: 1,
-  capabilities: [{
-    browserName: 'chrome'
-  }],
+  capabilities: [
+    {
+      browserName: 'chrome'
+    }
+  ],
   runner: 'local',
   specs: ['./test/specs/*.spec.js'],
   exclude: [],
@@ -20,7 +22,7 @@ export const config = {
     ui: 'bdd',
     timeout: 300000
   },
-  onComplete: function(exitCode, config, capabilities, results) {
+  onComplete: function (exitCode, config, capabilities, results) {
     generateAccessibilityReportIndex()
   }
 }

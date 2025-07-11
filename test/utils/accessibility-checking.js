@@ -5,30 +5,38 @@ import path from 'path'
 const reportDirectory = path.join('./reports')
 
 export async function initialiseAccessibilityChecking() {
-    if (!fs.existsSync(reportDirectory)) {
-        fs.mkdirSync(reportDirectory);
-    }
+  if (!fs.existsSync(reportDirectory)) {
+    fs.mkdirSync(reportDirectory)
+  }
 
-    await wcagChecker.init(browser)
+  await wcagChecker.init(browser)
 }
 
 export async function analyseAccessibility(suffix) {
-    await wcagChecker.analyse(browser, suffix)
+  await wcagChecker.analyse(browser, suffix)
 }
 
 export function generateAccessibilityReports(filePrefix) {
-    fs.writeFileSync(path.join(reportDirectory, `${filePrefix}-accessibility-category.html`), wcagChecker.getHtmlReportByCategory(), (err) => {
-        if (err) throw err
-    })
-    fs.writeFileSync(path.join(reportDirectory, `${filePrefix}-accessibility-guideline.html`), wcagChecker.getHtmlReportByGuideLine(), (err) => {
-        if (err) throw err;
-    })
+  fs.writeFileSync(
+    path.join(reportDirectory, `${filePrefix}-accessibility-category.html`),
+    wcagChecker.getHtmlReportByCategory(),
+    (err) => {
+      if (err) throw err
+    }
+  )
+  fs.writeFileSync(
+    path.join(reportDirectory, `${filePrefix}-accessibility-guideline.html`),
+    wcagChecker.getHtmlReportByGuideLine(),
+    (err) => {
+      if (err) throw err
+    }
+  )
 }
 
 export function generateAccessibilityReportIndex() {
-    const filenames = fs.readdirSync(reportDirectory)
+  const filenames = fs.readdirSync(reportDirectory)
 
-    const html = `
+  const html = `
         <html>
             <head>
                 <title>Accessibility Reports</title>
@@ -44,12 +52,12 @@ export function generateAccessibilityReportIndex() {
             </head>
             <body>
                 <ul>
-                ${filenames.map(f => `<li><a href="${f}">${f}</a></li>`).join('')}
+                ${filenames.map((f) => `<li><a href="${f}">${f}</a></li>`).join('')}
                 </ul>
             </body>
         </html>
         `
-    fs.writeFileSync(path.join(reportDirectory, 'index.html'), html, (err) => {
-        if (err) throw err
-    })
+  fs.writeFileSync(path.join(reportDirectory, 'index.html'), html, (err) => {
+    if (err) throw err
+  })
 }
