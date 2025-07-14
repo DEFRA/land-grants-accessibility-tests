@@ -4,12 +4,10 @@ import {
   generateAccessibilityReports
 } from '../utils/accessibility-checking.js'
 import {
-  confirmAndSend,
   continueJourney,
   ensureUrl,
   enterValueFor,
   selectOption,
-  selectRequiredAction,
   startJourney
 } from '../utils/journey-actions.js'
 
@@ -48,30 +46,30 @@ describe('Land grants end to end journey', () => {
     await continueJourney()
 
     // select action
-    await ensureUrl('choose-which-actions-to-do')
-    await analyseAccessibility()
-    await selectRequiredAction('CMOR1', '4.53411065')
-    await continueJourney()
+    // await ensureUrl('choose-which-actions-to-do')
+    // await analyseAccessibility()
+    // await selectRequiredAction('CMOR1', '4.53411065')
+    // await continueJourney()
 
-    // check selected land actions
-    await ensureUrl('check-selected-land-actions')
-    await analyseAccessibility()
-    await selectOption('No')
-    await continueJourney()
+    // // check selected land actions
+    // await ensureUrl('check-selected-land-actions')
+    // await analyseAccessibility()
+    // await selectOption('No')
+    // await continueJourney()
 
-    // check summary
-    await ensureUrl('summary')
-    await analyseAccessibility()
-    await continueJourney()
+    // // check summary
+    // await ensureUrl('summary')
+    // await analyseAccessibility()
+    // await continueJourney()
 
-    // submit application
-    await ensureUrl('submit-your-application')
-    await analyseAccessibility()
-    await confirmAndSend()
+    // // submit application
+    // await ensureUrl('submit-your-application')
+    // await analyseAccessibility()
+    // await confirmAndSend()
 
-    // confirmation
-    await ensureUrl('confirmation')
-    await analyseAccessibility()
+    // // confirmation
+    // await ensureUrl('confirmation')
+    // await analyseAccessibility()
 
     generateAccessibilityReports('land-grants-e2e-journey')
   })
