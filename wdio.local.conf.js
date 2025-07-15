@@ -23,11 +23,16 @@ export const config = {
     timeout: 300000
   },
   onComplete: function (exitCode, config, capabilities, results) {
+    // eslint-disable-next-line no-console
     console.log('Tests finished. Exit code:', exitCode)
+    // eslint-disable-next-line no-console
     console.log(results)
 
     if (results.failed > 0) {
-      console.error('Some tests failed. Generating accessibility report index...')
+      // eslint-disable-next-line no-console
+      console.error(
+        'Some tests failed. Generating accessibility report index...'
+      )
       generateAccessibilityReportIndex(results)
       process.exit(exitCode)
     }
