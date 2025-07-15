@@ -32,7 +32,7 @@ describe('Land grants end to end journey', () => {
     // land details
     await ensureUrl('land-details')
     await analyseAccessibility()
-    await selectOption('Yes')
+    await selectOption('No')
     await continueJourney()
 
     // agreement name
