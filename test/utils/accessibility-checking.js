@@ -33,7 +33,7 @@ export function generateAccessibilityReports(filePrefix) {
   )
 }
 
-export function generateAccessibilityReportIndex() {
+export function generateAccessibilityReportIndex(results) {
   const filenames = fs.readdirSync(reportDirectory)
 
   const html = `
@@ -51,6 +51,9 @@ export function generateAccessibilityReportIndex() {
                 </style>
             </head>
             <body>
+                <h1>Accessibility Reports</h1>
+                <p>Generated on: ${new Date().toLocaleString()}</p>
+                <p>Test results: ${results.passed} passed, ${results.failed} failed
                 <ul>
                 ${filenames.map((f) => `<li><a href="${f}">${f}</a></li>`).join('')}
                 </ul>

@@ -47,6 +47,15 @@ export const config = {
     timeout: 300000
   },
   onComplete: function (exitCode, config, capabilities, results) {
-    generateAccessibilityReportIndex()
+    console.log('Tests finished. Exit code:', exitCode)
+    console.log(results)
+
+    if (results.failed > 0) {
+      console.error('Some tests failed. Generating accessibility report index...')
+      generateAccessibilityReportIndex(results)
+      process.exit(exitCode)
+    }
+
+    generateAccessibilityReportIndex(results)
   }
 }
