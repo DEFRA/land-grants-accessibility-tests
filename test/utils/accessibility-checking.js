@@ -52,7 +52,7 @@ export function generateAccessibilityReportIndex(results) {
             </head>
             <body>
                 <h1>Accessibility Reports</h1>
-                <p>Generated on: ${new Date().toLocaleString()}</p>
+                <p>Generated on: ${new Date().toLocaleDateString('en-GB')} ${new Date().toLocaleTimeString('en-GB', { hour12: false })}</p>
                 <p>Test results: ${results.passed} passed, ${results.failed} failed
                 <ul>
                 ${filenames.map((f) => `<li><a href="${f}">${f}</a></li>`).join('')}
