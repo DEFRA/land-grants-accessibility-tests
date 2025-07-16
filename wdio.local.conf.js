@@ -1,7 +1,7 @@
 import { generateAccessibilityReportIndex } from './test/utils/accessibility-checking.js'
 
 export const config = {
-  baseUrl: `https://grants-ui.dev.cdp-int.defra.cloud`,
+  baseUrl: process.env.GRANTS_UI_BASE_URL || 'http://localhost:3000',
   maxInstances: 1,
   capabilities: [
     {
