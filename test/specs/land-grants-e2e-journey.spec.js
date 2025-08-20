@@ -6,7 +6,6 @@ import {
 import {
   continueJourney,
   ensureUrl,
-  enterValueFor,
   selectOption,
   startJourney,
   selectRequiredAction,
@@ -29,16 +28,14 @@ describe('Land grants end to end journey', () => {
     await analyseAccessibility()
     await continueJourney()
 
-    // land details
-    await ensureUrl('land-details')
+    // confirm you will be eligible
+    await ensureUrl('confirm-you-will-be-eligible')
     await analyseAccessibility()
-    await selectOption('Yes')
     await continueJourney()
 
-    // agreement name
-    await ensureUrl('agreement-name')
+    // confirm your land details are up to date
+    await ensureUrl('confirm-your-land-details-are-up-to-date')
     await analyseAccessibility()
-    await enterValueFor('Test Agreement', 'Enter your agreement name')
     await continueJourney()
 
     // select land parcel
@@ -48,9 +45,9 @@ describe('Land grants end to end journey', () => {
     await continueJourney()
 
     // select action
-    await ensureUrl('choose-which-actions-to-do')
+    await ensureUrl('select-actions-for-land-parcel')
     await analyseAccessibility()
-    await selectRequiredAction('CMOR1', '4.53411065')
+    await selectRequiredAction('CMOR1')
     await continueJourney()
 
     // // check selected land actions

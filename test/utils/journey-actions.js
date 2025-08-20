@@ -1,7 +1,5 @@
 export async function confirmAndSend() {
-  await $(
-    `//button[contains(text(),'I agree - submit my application')]`
-  ).click()
+  await $(`//button[contains(text(),'Submit')]`).click()
 }
 
 export async function continueJourney() {
@@ -36,11 +34,9 @@ export async function selectOptions(...options) {
   }
 }
 
-export async function selectRequiredAction(actionName, quantity) {
-  const checkbox = await $(`input[type='checkbox'][value='${actionName}']`)
+export async function selectRequiredAction(actionName) {
+  const checkbox = await $(`input[type='radio'][value='${actionName}']`)
   await checkbox.click()
-  const quantityInput = await $(`input[name='qty-${actionName}']`)
-  await quantityInput.setValue(quantity)
 }
 
 export async function startJourney() {
