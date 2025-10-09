@@ -7,23 +7,28 @@ import {
   continueJourney,
   ensureUrl,
   selectOption,
-  startJourney,
   selectRequiredAction,
-  confirmAndSend
+  confirmAndSend,
+  login,
+  clearApplicationState,
+  clickRemoveParcelLink,
+  selectRequiredLandParcel
 } from '../utils/journey-actions.js'
 
 describe('Land grants end to end journey', () => {
   it('should analyse accessibility for all pages', async () => {
+    const crn = '1100495932'
+    const parcel = 'SD7946-0155'
     await initialiseAccessibilityChecking()
 
-    await browser.url('/find-funding-for-land-or-farms/start')
+    await browser.url('/farm-payments/')
 
-    // start
-    await ensureUrl('start')
-    await analyseAccessibility()
-    await startJourney()
+    // login
+    await login(crn)
+    await ensureUrl('confirm-farm-details')
 
-    // confirm your details
+    // clear application state and confirm your details
+    await clearApplicationState()
     await ensureUrl('confirm-farm-details')
     await analyseAccessibility()
     await continueJourney()
@@ -41,7 +46,7 @@ describe('Land grants end to end journey', () => {
     // select land parcel
     await ensureUrl('select-land-parcel')
     await analyseAccessibility()
-    await selectOption('SD6743 8083')
+    await selectRequiredLandParcel(parcel)
     await continueJourney()
 
     // select action
@@ -50,15 +55,19 @@ describe('Land grants end to end journey', () => {
     await selectRequiredAction('CMOR1')
     await continueJourney()
 
-    // // check selected land actions
+    // check selected land actions
     await ensureUrl('check-selected-land-actions')
+    await analyseAccessibility()
+
+    // click Remove Parcel
+    await clickRemoveParcelLink(parcel)
+    await ensureUrl('remove-parcel')
     await analyseAccessibility()
     await selectOption('No')
     await continueJourney()
 
-    // check summary
-    await ensureUrl('summary')
-    await analyseAccessibility()
+    // do not add another parcel
+    await selectOption('No')
     await continueJourney()
 
     // submit application

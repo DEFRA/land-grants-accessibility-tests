@@ -35,12 +35,14 @@ export async function selectOptions(...options) {
 }
 
 export async function selectRequiredAction(actionName) {
-  const checkbox = await $(`input[type='radio'][value='${actionName}']`)
-  await checkbox.click()
-}
-
-export async function startJourney() {
-  await $(`aria/Start now`).click()
+  const checkbox =
+    actionName === 'CMOR1'
+      ? await $(`input[type='checkbox'][value='${actionName}']`)
+      : await $(`input[type='radio'][value='${actionName}']`)
+  const isChecked = await checkbox.isSelected()
+  if (!isChecked) {
+    await checkbox.click()
+  }
 }
 
 export async function selectTask(taskName) {
@@ -57,4 +59,36 @@ export async function unselectOption(option) {
   if (await $(`aria/${option}`).isSelected()) {
     await $(`aria/${option}`).click()
   }
+}
+
+export async function login(crn) {
+  await expect(browser).toHaveTitle(
+    /Sign in to your acccount|FCP Defra ID stub - GOV.UK/
+  )
+
+  const usernameInput = await $('#crn')
+  const passwordInput = await $('#password')
+
+  const submitButton = await $('button[type="submit"]')
+
+  await usernameInput.setValue(crn)
+  await passwordInput.setValue('Password456')
+  await submitButton.click()
+  // ensure we wait and are redirected to our service start page
+  await expect(browser).toHaveTitle(`Confirm your details | Farm payments`)
+}
+
+export async function clearApplicationState() {
+  const link = await $("a[href='./clear-application-state']")
+  await link.click()
+}
+
+export async function clickRemoveParcelLink(parcel) {
+  const link = await $("a[href$='remove-parcel?parcelId=" + parcel + "']")
+  await link.click()
+}
+
+export async function selectRequiredLandParcel(value) {
+  const radioButton = await $(`input[type='radio'][value='${value}']`)
+  await radioButton.click()
 }
