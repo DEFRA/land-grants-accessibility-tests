@@ -35,7 +35,7 @@ export const config = {
   runner: 'local',
   specs: ['./test/specs/*.spec.js'],
   exclude: [],
-  logLevel: 'info',
+  logLevel: 'debug',
   bail: 0,
   waitforTimeout: 10000,
   connectionRetryTimeout: 120000,
