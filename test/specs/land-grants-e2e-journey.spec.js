@@ -7,18 +7,18 @@ import {
   continueJourney,
   ensureUrl,
   // selectOption,
-  // selectRequiredAction,
+  selectRequiredAction,
   // confirmAndSend,
   login,
-  clearApplicationState
+  clearApplicationState,
   // clickRemoveParcelLink,
-  // selectRequiredLandParcel
+  selectRequiredLandParcel
 } from '../utils/journey-actions.js'
 
 describe('Land grants end to end journey', () => {
   it('should analyse accessibility for all pages', async () => {
     const crn = '1100495932'
-    // const parcel = 'SD7946-0155'
+    const parcel = 'SD7946-0155'
     await initialiseAccessibilityChecking()
 
     await browser.url('/farm-payments/')
@@ -43,17 +43,17 @@ describe('Land grants end to end journey', () => {
     await analyseAccessibility()
     await continueJourney()
 
-    // // select land parcel
-    // await ensureUrl('select-land-parcel')
-    // await analyseAccessibility()
-    // await selectRequiredLandParcel(parcel)
-    // await continueJourney()
-    //
-    // // select action
-    // await ensureUrl('select-actions-for-land-parcel')
-    // await analyseAccessibility()
-    // await selectRequiredAction('CMOR1')
-    // await continueJourney()
+    // select land parcel
+    await ensureUrl('select-land-parcel')
+    await analyseAccessibility()
+    await selectRequiredLandParcel(parcel)
+    await continueJourney()
+
+    // select action
+    await ensureUrl('select-actions-for-land-parcel')
+    await analyseAccessibility()
+    await selectRequiredAction('CMOR1')
+    await continueJourney()
     //
     // // check selected land actions
     // await ensureUrl('check-selected-land-actions')
