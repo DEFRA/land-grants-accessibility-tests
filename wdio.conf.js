@@ -57,6 +57,8 @@ export const config = {
       console.error(
         'Some tests failed. Generating accessibility report index...'
       )
+      // eslint-disable-next-line no-console
+      console.log('Results are: ', results)
       generateAccessibilityReportIndex(results)
       process.exit(exitCode)
     }

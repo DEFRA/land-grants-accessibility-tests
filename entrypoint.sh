@@ -2,8 +2,9 @@
 
 echo "run_id: $RUN_ID"
 
-npx wdio run ./wdio.conf.js
+npm run test
 WDIO_EXIT_CODE=$?
+echo "WDIO_EXIT_CODE: $WDIO_EXIT_CODE"
 
 ./bin/publish-tests.sh
 
