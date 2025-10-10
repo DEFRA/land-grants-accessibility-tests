@@ -2,10 +2,16 @@
 
 echo "run_id: $RUN_ID"
 
-npm run test
-WDIO_EXIT_CODE=$?
-echo "WDIO_EXIT_CODE: $WDIO_EXIT_CODE"
+npx wdio run ./wdio.conf.js
 
 ./bin/publish-tests.sh
 
-exit $WDIO_EXIT_CODE
+# At the end of the test run, if the suite has failed we write a file called 'FAILED'
+if [ -f FAILED ]; then
+  echo "test suite failed"
+  cat ./FAILED
+  exit 1
+fi
+
+echo "test suite passed"
+exit 0
