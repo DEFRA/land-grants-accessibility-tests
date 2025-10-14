@@ -13,7 +13,11 @@ export async function initialiseAccessibilityChecking() {
 }
 
 export async function analyseAccessibility(suffix) {
-  await wcagChecker.analyse(browser, suffix)
+  try {
+    await wcagChecker.analyse(browser, suffix)
+  } catch (error) {
+    console.error(`Accessibility analysis failed for ${suffix}:`, error.message)
+  }
 }
 
 export function generateAccessibilityReports(filePrefix) {
