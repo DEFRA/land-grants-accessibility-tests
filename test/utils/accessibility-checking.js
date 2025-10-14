@@ -2,25 +2,15 @@ import * as wcagChecker from '../../dist/wcagchecker.js'
 import fs from 'fs'
 import path from 'path'
 import logger from '@wdio/logger'
-import { fileURLToPath } from 'url'
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const axeCorePath = path.resolve(
-  __dirname,
-  '../../node_modules/axe-core/axe.min.js'
-)
 
 const log = logger('landGrantsAccessibilityTests')
 const reportDirectory = path.join('./reports')
-let allViolations = []
 
 export async function initialiseAccessibilityChecking() {
   if (!fs.existsSync(reportDirectory)) {
     fs.mkdirSync(reportDirectory)
   }
 
-  const axeSource = fs.readFileSync(axeCorePath, 'utf8')
-  await browser.execute(axeSource)
   await wcagChecker.init(browser)
 }
 
@@ -28,44 +18,7 @@ export async function analyseAccessibility(suffix) {
   try {
     await wcagChecker.analyse(browser, suffix)
   } catch (error) {
-    log.warn(`wcagChecker failed for ${suffix || 'page'}, using fallback`)
-
-    try {
-      const axeExists = await browser.execute(
-        () => typeof window.axe !== 'undefined'
-      )
-
-      if (!axeExists) {
-        log.warn('axe not found in window, re-injecting')
-        const axeSource = fs.readFileSync(axeCorePath, 'utf8')
-        await browser.execute(axeSource)
-      }
-
-      const result = await browser.executeAsync((done) => {
-        window.axe
-          .run()
-          .then((results) => {
-            done(results.violations)
-          })
-          .catch((err) => {
-            log.error(`Axe run error: ${err.message}`)
-            done([])
-          })
-      })
-
-      if (result && result.length > 0) {
-        allViolations.push({
-          page: suffix || 'unknown',
-          url: await browser.getUrl(),
-          violations: result
-        })
-        log.info(`Found ${result.length} violations for ${suffix}`)
-      } else {
-        log.info(`No violations found for ${suffix}`)
-      }
-    } catch (fallbackError) {
-      log.error(`Fallback failed: ${fallbackError.message}`)
-    }
+    log.error(`Accessibility analysis failed for ${suffix}: ${error.message}`)
   }
 }
 
@@ -76,88 +29,24 @@ export function generateAccessibilityReports(filePrefix) {
   if (categoryReport && categoryReport.length > 0) {
     fs.writeFileSync(
       path.join(reportDirectory, `${filePrefix}-accessibility-category.html`),
-      categoryReport
+      categoryReport,
+      (err) => {
+        if (err) throw err
+      }
     )
   }
 
   if (guidelineReport && guidelineReport.length > 0) {
     fs.writeFileSync(
       path.join(reportDirectory, `${filePrefix}-accessibility-guideline.html`),
-      guidelineReport
+      guidelineReport,
+      (err) => {
+        if (err) throw err
+      }
     )
   }
-
-  if (allViolations.length > 0) {
-    const html = generateFallbackReport(filePrefix, allViolations)
-    fs.writeFileSync(
-      path.join(reportDirectory, `${filePrefix}-accessibility-fallback.html`),
-      html
-    )
-  }
-
-  allViolations = []
 }
 
-function generateFallbackReport(filePrefix, violations) {
-  return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Accessibility Report - ${filePrefix}</title>
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .violation { border: 1px solid #d32f2f; margin: 20px 0; padding: 15px; background: #ffebee; }
-        .page-title { color: #1976d2; font-size: 1.5em; margin-top: 30px; }
-        .impact-critical { color: #d32f2f; font-weight: bold; }
-        .impact-serious { color: #f57c00; font-weight: bold; }
-        .impact-moderate { color: #fbc02d; font-weight: bold; }
-        .impact-minor { color: #388e3c; font-weight: bold; }
-    </style>
-</head>
-<body>
-    <h1>Accessibility Report: ${filePrefix}</h1>
-    <p>Generated: ${new Date().toLocaleString()}</p>
-    
-    ${violations
-      .map(
-        (pageData) => `
-        <div class="page-section">
-            <h2 class="page-title">${pageData.page}</h2>
-            <p><strong>URL:</strong> ${pageData.url}</p>
-            <p><strong>Violations:</strong> ${pageData.violations.length}</p>
-            
-            ${pageData.violations
-              .map(
-                (v) => `
-                <div class="violation">
-                    <h3>${v.id}: ${v.help}</h3>
-                    <p class="impact-${v.impact}">Impact: ${v.impact}</p>
-                    <p>${v.description}</p>
-                    <p><strong>Affected elements:</strong> ${v.nodes.length}</p>
-                    <ul>
-                        ${v.nodes
-                          .slice(0, 3)
-                          .map(
-                            (node) => `
-                            <li><code>${node.html}</code></li>
-                        `
-                          )
-                          .join('')}
-                    </ul>
-                    <a href="${v.helpUrl}" target="_blank">More info</a>
-                </div>
-            `
-              )
-              .join('')}
-        </div>
-    `
-      )
-      .join('')}
-</body>
-</html>
-  `
-}
 export function generateAccessibilityReportIndex() {
   if (!fs.existsSync(reportDirectory)) {
     fs.mkdirSync(reportDirectory, { recursive: true })
