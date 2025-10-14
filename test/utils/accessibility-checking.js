@@ -18,7 +18,7 @@ export async function analyseAccessibility(suffix) {
   try {
     await wcagChecker.analyse(browser, suffix)
   } catch (error) {
-    log.error(`Accessibility analysis failed for ${suffix}:`, error.message)
+    log.error(`Accessibility analysis failed for ${suffix}: ${error.message}`)
   }
 }
 
