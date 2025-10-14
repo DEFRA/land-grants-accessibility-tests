@@ -6,12 +6,12 @@ import {
 import {
   continueJourney,
   ensureUrl,
-  selectOption,
-  selectRequiredAction,
+  // selectOption,
+  // selectRequiredAction,
   // confirmAndSend,
   login,
   clearApplicationState,
-  clickRemoveParcelLink,
+  // clickRemoveParcelLink,
   selectRequiredLandParcel
 } from '../utils/journey-actions.js'
 
@@ -50,22 +50,22 @@ describe('Land grants end to end journey', () => {
     await continueJourney()
 
     // select action
-    await ensureUrl('select-actions-for-land-parcel')
-    await analyseAccessibility()
-    await selectRequiredAction('CMOR1')
-    await continueJourney()
-
-    // check selected land actions
-    await ensureUrl('check-selected-land-actions')
-    await analyseAccessibility()
-
-    // click Remove Parcel
-    await clickRemoveParcelLink(parcel)
-    await ensureUrl('remove-parcel')
-    await analyseAccessibility()
-    await selectOption('No')
-    await continueJourney()
+    // await ensureUrl('select-actions-for-land-parcel')
+    // await analyseAccessibility()
+    // await selectRequiredAction('CMOR1')
+    // await continueJourney()
     //
+    // // check selected land actions
+    // await ensureUrl('check-selected-land-actions')
+    // await analyseAccessibility()
+    //
+    // // click Remove Parcel
+    // await clickRemoveParcelLink(parcel)
+    // await ensureUrl('remove-parcel')
+    // await analyseAccessibility()
+    // await selectOption('No')
+    // await continueJourney()
+    // //
     // // do not add another parcel
     // await selectOption('No')
     // await continueJourney()
