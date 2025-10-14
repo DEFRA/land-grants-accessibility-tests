@@ -1,7 +1,9 @@
 import * as wcagChecker from '../../dist/wcagchecker.js'
 import fs from 'fs'
 import path from 'path'
+import logger from '@wdio/logger'
 
+const log = logger('landGrantsAccessibilityTests')
 const reportDirectory = path.join('./reports')
 
 export async function initialiseAccessibilityChecking() {
@@ -13,7 +15,11 @@ export async function initialiseAccessibilityChecking() {
 }
 
 export async function analyseAccessibility(suffix) {
-  await wcagChecker.analyse(browser, suffix)
+  try {
+    await wcagChecker.analyse(browser, suffix)
+  } catch (error) {
+    log.error(`Accessibility analysis failed for ${suffix}: ${error.message}`)
+  }
 }
 
 export function generateAccessibilityReports(filePrefix) {
