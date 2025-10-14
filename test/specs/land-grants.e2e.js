@@ -57,7 +57,7 @@ describe('Land grants end to end journey', () => {
     //
     // // check selected land actions
     await ensureUrl('check-selected-land-actions')
-    await analyseAccessibility()
+    await analyseAccessibility('check-selected-land-actions')
     //
     // // click Remove Parcel
     // await clickRemoveParcelLink(parcel)

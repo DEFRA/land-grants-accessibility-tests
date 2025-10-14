@@ -2,16 +2,25 @@ import * as wcagChecker from '../../dist/wcagchecker.js'
 import fs from 'fs'
 import path from 'path'
 import logger from '@wdio/logger'
+import { fileURLToPath } from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const axeCorePath = path.resolve(
+  __dirname,
+  '../../node_modules/axe-core/axe.min.js'
+)
 
 const log = logger('landGrantsAccessibilityTests')
 const reportDirectory = path.join('./reports')
-let allViolations = [] // Store violations for report generation
+let allViolations = []
 
 export async function initialiseAccessibilityChecking() {
   if (!fs.existsSync(reportDirectory)) {
     fs.mkdirSync(reportDirectory)
   }
 
+  const axeSource = fs.readFileSync(axeCorePath, 'utf8')
+  await browser.execute(axeSource)
   await wcagChecker.init(browser)
 }
 
@@ -22,17 +31,26 @@ export async function analyseAccessibility(suffix) {
     log.warn(`wcagChecker failed for ${suffix || 'page'}, using fallback`)
 
     try {
+      const axeExists = await browser.execute(
+        () => typeof window.axe !== 'undefined'
+      )
+
+      if (!axeExists) {
+        log.warn('axe not found in window, re-injecting')
+        const axeSource = fs.readFileSync(axeCorePath, 'utf8')
+        await browser.execute(axeSource)
+      }
+
       const result = await browser.executeAsync((done) => {
-        if (typeof window.axe !== 'undefined') {
-          window.axe
-            .run()
-            .then((results) => {
-              done(results.violations)
-            })
-            .catch(() => done([]))
-        } else {
-          done([])
-        }
+        window.axe
+          .run()
+          .then((results) => {
+            done(results.violations)
+          })
+          .catch((err) => {
+            log.error(`Axe run error: ${err.message}`)
+            done([])
+          })
       })
 
       if (result && result.length > 0) {
@@ -42,6 +60,8 @@ export async function analyseAccessibility(suffix) {
           violations: result
         })
         log.info(`Found ${result.length} violations for ${suffix}`)
+      } else {
+        log.info(`No violations found for ${suffix}`)
       }
     } catch (fallbackError) {
       log.error(`Fallback failed: ${fallbackError.message}`)
