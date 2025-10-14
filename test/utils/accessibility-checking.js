@@ -50,39 +50,29 @@ export async function analyseAccessibility(suffix) {
 }
 
 export function generateAccessibilityReports(filePrefix) {
-  try {
-    const categoryReport = wcagChecker.getHtmlReportByCategory()
-    const guidelineReport = wcagChecker.getHtmlReportByGuideLine()
+  const categoryReport = wcagChecker.getHtmlReportByCategory()
+  const guidelineReport = wcagChecker.getHtmlReportByGuideLine()
 
-    if (categoryReport && categoryReport.length > 0) {
-      fs.writeFileSync(
-        path.join(reportDirectory, `${filePrefix}-accessibility-category.html`),
-        categoryReport
-      )
-    }
-
-    if (guidelineReport && guidelineReport.length > 0) {
-      fs.writeFileSync(
-        path.join(
-          reportDirectory,
-          `${filePrefix}-accessibility-guideline.html`
-        ),
-        guidelineReport
-      )
-    }
-  } catch (error) {
-    log.warn(
-      'Could not generate wcagChecker reports, generating fallback report'
+  if (categoryReport && categoryReport.length > 0) {
+    fs.writeFileSync(
+      path.join(reportDirectory, `${filePrefix}-accessibility-category.html`),
+      categoryReport
     )
+  }
 
-    // Generate custom report from stored violations
-    if (allViolations.length > 0) {
-      const html = generateFallbackReport(filePrefix, allViolations)
-      fs.writeFileSync(
-        path.join(reportDirectory, `${filePrefix}-accessibility-fallback.html`),
-        html
-      )
-    }
+  if (guidelineReport && guidelineReport.length > 0) {
+    fs.writeFileSync(
+      path.join(reportDirectory, `${filePrefix}-accessibility-guideline.html`),
+      guidelineReport
+    )
+  }
+
+  if (allViolations.length > 0) {
+    const html = generateFallbackReport(filePrefix, allViolations)
+    fs.writeFileSync(
+      path.join(reportDirectory, `${filePrefix}-accessibility-fallback.html`),
+      html
+    )
   }
 
   allViolations = []
