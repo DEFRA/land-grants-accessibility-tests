@@ -30,28 +30,28 @@ describe('Land grants end to end journey', () => {
     // clear application state and confirm your details
     await clearApplicationState()
     await ensureUrl('confirm-farm-details')
-    await analyseAccessibility()
+    await analyseAccessibility('confirm-farm-details')
     await continueJourney()
 
     // confirm you will be eligible
     await ensureUrl('confirm-you-will-be-eligible')
-    await analyseAccessibility()
+    await analyseAccessibility('confirm-you-will-be-eligible')
     await continueJourney()
 
     // confirm your land details are up to date
     await ensureUrl('confirm-your-land-details-are-up-to-date')
-    await analyseAccessibility()
+    await analyseAccessibility('confirm-your-land-details-are-up-to-date')
     await continueJourney()
 
     // select land parcel
     await ensureUrl('select-land-parcel')
-    await analyseAccessibility()
+    await analyseAccessibility('select-land-parcel')
     await selectRequiredLandParcel(parcel)
     await continueJourney()
 
     // select action
     await ensureUrl('select-actions-for-land-parcel')
-    await analyseAccessibility()
+    await analyseAccessibility('select-actions-for-land-parcel')
     await selectRequiredAction('CMOR1')
     await continueJourney()
     //
