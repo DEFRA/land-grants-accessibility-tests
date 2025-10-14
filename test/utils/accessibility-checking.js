@@ -21,7 +21,6 @@ export async function analyseAccessibility(suffix) {
   } catch (error) {
     log.warn(`wcagChecker failed for ${suffix || 'page'}, using fallback`)
 
-    // Fallback: Run axe directly and store results
     try {
       const result = await browser.executeAsync((done) => {
         if (typeof window.axe !== 'undefined') {
@@ -36,7 +35,6 @@ export async function analyseAccessibility(suffix) {
         }
       })
 
-      // Store violations with page context
       if (result && result.length > 0) {
         allViolations.push({
           page: suffix || 'unknown',
@@ -52,7 +50,6 @@ export async function analyseAccessibility(suffix) {
 }
 
 export function generateAccessibilityReports(filePrefix) {
-  // Try original wcagChecker reports first
   try {
     const categoryReport = wcagChecker.getHtmlReportByCategory()
     const guidelineReport = wcagChecker.getHtmlReportByGuideLine()
@@ -78,7 +75,7 @@ export function generateAccessibilityReports(filePrefix) {
       'Could not generate wcagChecker reports, generating fallback report'
     )
 
-    // Generate our own report from stored violations
+    // Generate custom report from stored violations
     if (allViolations.length > 0) {
       const html = generateFallbackReport(filePrefix, allViolations)
       fs.writeFileSync(
@@ -88,7 +85,6 @@ export function generateAccessibilityReports(filePrefix) {
     }
   }
 
-  // Reset for next test
   allViolations = []
 }
 
