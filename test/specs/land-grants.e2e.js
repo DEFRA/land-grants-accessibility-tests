@@ -7,7 +7,7 @@ import {
   continueJourney,
   ensureUrl,
   // selectOption,
-  // selectRequiredAction,
+  selectRequiredAction,
   // confirmAndSend,
   login,
   clearApplicationState,
@@ -50,14 +50,14 @@ describe('Land grants end to end journey', () => {
     await continueJourney()
 
     // select action
-    // await ensureUrl('select-actions-for-land-parcel')
-    // await analyseAccessibility()
-    // await selectRequiredAction('CMOR1')
-    // await continueJourney()
+    await ensureUrl('select-actions-for-land-parcel')
+    await analyseAccessibility()
+    await selectRequiredAction('CMOR1')
+    await continueJourney()
     //
     // // check selected land actions
-    // await ensureUrl('check-selected-land-actions')
-    // await analyseAccessibility()
+    await ensureUrl('check-selected-land-actions')
+    await analyseAccessibility()
     //
     // // click Remove Parcel
     // await clickRemoveParcelLink(parcel)
