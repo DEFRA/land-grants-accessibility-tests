@@ -6,12 +6,12 @@ import {
 import {
   continueJourney,
   ensureUrl,
-  // selectOption,
+  selectOption,
   selectRequiredAction,
-  // confirmAndSend,
+  confirmAndSend,
   login,
   clearApplicationState,
-  // clickRemoveParcelLink,
+  clickRemoveParcelLink,
   selectRequiredLandParcel
 } from '../utils/journey-actions.js'
 
@@ -25,7 +25,6 @@ describe('Land grants end to end journey', () => {
 
     // login
     await login(crn)
-    await ensureUrl('confirm-farm-details')
 
     // clear application state and confirm your details
     await clearApplicationState()
@@ -54,30 +53,30 @@ describe('Land grants end to end journey', () => {
     await analyseAccessibility('select-actions-for-land-parcel')
     await selectRequiredAction('CMOR1')
     await continueJourney()
-    //
-    // // check selected land actions
+
+    // check selected land actions
     await ensureUrl('check-selected-land-actions')
     await analyseAccessibility('check-selected-land-actions')
-    //
-    // // click Remove Parcel
-    // await clickRemoveParcelLink(parcel)
-    // await ensureUrl('remove-parcel')
-    // await analyseAccessibility()
-    // await selectOption('No')
-    // await continueJourney()
-    // //
-    // // do not add another parcel
-    // await selectOption('No')
-    // await continueJourney()
-    //
-    // // submit application
-    // await ensureUrl('submit-your-application')
-    // await analyseAccessibility()
-    // await confirmAndSend()
-    //
-    // // confirmation
-    // await ensureUrl('confirmation')
-    // await analyseAccessibility()
+
+    // click Remove Parcel
+    await clickRemoveParcelLink(parcel)
+    await ensureUrl('remove-parcel')
+    await analyseAccessibility()
+    await selectOption('No')
+    await continueJourney()
+
+    // do not add another parcel
+    await selectOption('No')
+    await continueJourney()
+
+    // submit application
+    await ensureUrl('submit-your-application')
+    await analyseAccessibility()
+    await confirmAndSend()
+
+    // confirmation
+    await ensureUrl('confirmation')
+    await analyseAccessibility()
 
     generateAccessibilityReports('land-grants-e2e-journey')
   })

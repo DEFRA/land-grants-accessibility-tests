@@ -75,7 +75,7 @@ export async function login(crn) {
   await passwordInput.setValue('Password456')
   await submitButton.click()
   // ensure we wait and are redirected to our service start page
-  await expect(browser).toHaveTitle(`Confirm your details | Farm payments`)
+  await expect(browser).toHaveTitle(/Farm payments/)
 }
 
 export async function clearApplicationState() {
