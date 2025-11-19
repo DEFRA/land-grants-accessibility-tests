@@ -12,13 +12,15 @@ import {
   login,
   clearApplicationState,
   clickRemoveParcelLink,
-  selectRequiredLandParcel
+  selectRequiredLandParcel,
+  clickRemoveActionLink
 } from '../utils/journey-actions.js'
 
 describe('Land grants end to end journey', () => {
   it('should analyse accessibility for all pages', async () => {
-    const crn = '1100495932'
-    const parcel = 'SD7946-0155'
+    const crn = '1103313150'
+    const parcel = 'SK0971-9194'
+    const action = 'CMOR1'
     await initialiseAccessibilityChecking()
 
     await browser.url('/farm-payments/')
@@ -51,7 +53,7 @@ describe('Land grants end to end journey', () => {
     // select action
     await ensureUrl('select-actions-for-land-parcel')
     await analyseAccessibility('select-actions-for-land-parcel')
-    await selectRequiredAction('CMOR1')
+    await selectRequiredAction(action)
     await continueJourney()
 
     // check selected land actions
@@ -64,6 +66,15 @@ describe('Land grants end to end journey', () => {
     await analyseAccessibility()
     await selectOption('No')
     await continueJourney()
+    await ensureUrl('check-selected-land-actions')
+
+    // click Remove Action
+    await clickRemoveActionLink(parcel, action)
+    await ensureUrl('remove-action')
+    await analyseAccessibility()
+    await selectOption('No')
+    await continueJourney()
+    await ensureUrl('check-selected-land-actions')
 
     // do not add another parcel
     await selectOption('No')
