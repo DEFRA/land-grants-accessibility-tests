@@ -88,6 +88,13 @@ export async function clickRemoveParcelLink(parcel) {
   await link.click()
 }
 
+export async function clickRemoveActionLink(parcel, action) {
+  const link = await $(
+    `a[href='remove-action?parcelId=${parcel}&action=${action}']`
+  )
+  await link.click()
+}
+
 export async function selectRequiredLandParcel(value) {
   const radioButton = await $(`input[type='radio'][value='${value}']`)
   await radioButton.click()
