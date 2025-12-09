@@ -1,5 +1,7 @@
 import { generateAccessibilityReportIndex } from './test/utils/accessibility-checking.js'
-const oneMinute = 60 * 1000
+// Some journeys occasionally take longer than a minute against remote envs,
+// so allow a more generous window for each test before Mocha aborts.
+const fiveMinutes = 5 * 60 * 1000
 
 export const config = {
   //
@@ -65,9 +67,10 @@ export const config = {
 
   // Number of failures before the test suite bails.
   bail: 0,
-  waitforTimeout: 10000,
+  // Give remote page transitions a little more headroom
+  waitforTimeout: 60000,
   waitforInterval: 200,
-  connectionRetryTimeout: 6000,
+  connectionRetryTimeout: 120000,
   connectionRetryCount: 3,
   framework: 'mocha',
 
@@ -77,7 +80,7 @@ export const config = {
   // See the full list at http://mochajs.org/
   mochaOpts: {
     ui: 'bdd',
-    timeout: oneMinute
+    timeout: fiveMinutes
   },
 
   onComplete: function (exitCode, config, capabilities, results) {
