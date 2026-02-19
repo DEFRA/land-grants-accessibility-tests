@@ -11,7 +11,7 @@ if (debug) {
 
 export const config = {
   runner: 'local',
-  specs: ['./test/specs/**/*.e2e.js'],
+  specs: ['./test/specs/**/*.js'],
   // Patterns to exclude.
   exclude: [
     // 'path/to/excluded/files'
@@ -74,7 +74,12 @@ export const config = {
   // See the full list at http://mochajs.org/
   mochaOpts: {
     ui: 'bdd',
-    timeout: debug ? oneHour : 99000
+    timeout: debug ? oneHour : 999000,
+    // When not in dev environment, exclude tests tagged with @dev
+    ...(process.env.ENVIRONMENT !== 'dev' && {
+      grep: /@dev/,
+      invert: true
+    })
   },
   onComplete: function (exitCode, config, capabilities, results) {
     // eslint-disable-next-line no-console

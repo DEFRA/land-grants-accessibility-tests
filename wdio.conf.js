@@ -80,7 +80,12 @@ export const config = {
   // See the full list at http://mochajs.org/
   mochaOpts: {
     ui: 'bdd',
-    timeout: fiveMinutes
+    timeout: fiveMinutes,
+    // When not in dev environment, exclude tests tagged with @dev
+    ...(process.env.ENVIRONMENT !== 'dev' && {
+      grep: /@dev/,
+      invert: true
+    })
   },
 
   onComplete: function (exitCode, config, capabilities, results) {
