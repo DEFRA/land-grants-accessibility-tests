@@ -20,7 +20,10 @@ describe('Land grants end to end journey', () => {
   it('should analyse accessibility for all pages', async () => {
     const crn = '1103313150'
     const parcel = 'SK0971-9194'
-    const action = 'CMOR1'
+    const actionOne = 'CMOR1'
+    const actionTwo = 'UPL1'
+    const actionThree = 'UPL10'
+
     await initialiseAccessibilityChecking()
 
     await browser.url('/farm-payments/')
@@ -50,10 +53,12 @@ describe('Land grants end to end journey', () => {
     await selectRequiredLandParcel(parcel)
     await continueJourney()
 
-    // select action
+    // select actionOne
     await ensureUrl('select-actions-for-land-parcel')
     await analyseAccessibility('select-actions-for-land-parcel')
-    await selectRequiredAction(action)
+    await selectRequiredAction(actionOne)
+    await selectRequiredAction(actionTwo)
+    await selectRequiredAction(actionThree)
     await continueJourney()
 
     // check selected land actions
@@ -69,7 +74,7 @@ describe('Land grants end to end journey', () => {
     await ensureUrl('check-selected-land-actions')
 
     // click Remove Action
-    await clickRemoveActionLink(parcel, action)
+    await clickRemoveActionLink(parcel, actionOne)
     await ensureUrl('remove-action')
     await analyseAccessibility()
     await selectOption('No')
@@ -78,6 +83,11 @@ describe('Land grants end to end journey', () => {
 
     // do not add another parcel
     await selectOption('No')
+    await continueJourney()
+
+    // Give consent
+    await ensureUrl('you-must-have-consent')
+    await analyseAccessibility()
     await continueJourney()
 
     // submit application
